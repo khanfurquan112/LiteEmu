@@ -1,0 +1,28 @@
+name: Build LiteEmu.exe
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyInstaller
+        run: python -m pip install pyinstaller
+
+      - name: Build exe
+        run: python -m PyInstaller --onefile --noconsole --name LiteEmu launcher.py
+
+      - name: Upload exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiteEmu-exe
+          path: dist/LiteEmu.exe
